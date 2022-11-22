@@ -1,7 +1,13 @@
 const fs = require("fs"), https = require("https"), path = require("path");
 
-const requiredFiles = [{name: "finished.json", default: "[]"}, {name: "input.txt", default: ""}];
-for(let file of requiredFiles) if(!fs.existsSync(file.name)) fs.writeFileSync(file.name, file.default);
+const requiredFiles = [{name: "finished.json", default: "[]"}, {name: "input.txt", default: ""}, {name: "downloads"}];
+for(let file of requiredFiles) if(file.default == null) {
+    try {
+        fs.mkdirSync(file.name)
+    } catch(e) {}//lol no
+} else {
+    if(!fs.existsSync(file.name)) fs.writeFileSync(file.name, file.default);
+}
 
 const memes = fs.readFileSync("input.txt").toString().split("\n").filter(string => string.length > 1).map(b => b.replace("\r",""));
 const finishedMemes = JSON.parse(fs.readFileSync("finished.json"));
